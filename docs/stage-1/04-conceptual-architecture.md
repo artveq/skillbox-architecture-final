@@ -324,4 +324,156 @@ DDD помогает:
 
 ---
 
+```mermaid
+flowchart TB
 
+%% =========================
+%% CLIENT ZONE
+%% =========================
+subgraph CLIENT[Client Zone]
+    MobileApp[Mobile App]
+    WebApp[Web App]
+    Devices[Wearables & Sensors]
+end
+
+%% =========================
+%% API & EDGE ZONE
+%% =========================
+subgraph APIEDGE[API & Edge Zone]
+    ExternalGW[External API Gateway]
+    InternalGW[Internal API Gateway]
+    IoTGW[IoT Gateway]
+end
+
+%% =========================
+%% CORE SERVICES ZONE
+%% =========================
+subgraph CORE[Core Services Zone]
+
+    subgraph USER[User & Identity]
+        UserService[User Service]
+        AuthService[Auth Service]
+    end
+
+    subgraph TRAINING[Training & Telemetry]
+        TrainingService[Training Service]
+        TelemetryIngest[Telemetry Ingest Service]
+    end
+
+    subgraph SOCIAL[Social & Community]
+        SocialService[Social Service]
+        GroupService[Group Service]
+        DiscoveryService[Discovery Service]
+    end
+
+    subgraph GAMIFICATION[Gamification & Engagement]
+        GamificationService[Gamification Service]
+        LeaderboardService[Leaderboard Service]
+        ChallengeService[Challenge Service]
+    end
+
+    subgraph INVENTORY[Inventory & Commerce]
+        InventoryService[Inventory Service]
+        PromoService[Promo Service]
+        CommerceIntegration[Commerce Integration Service]
+    end
+
+    subgraph ANALYTICS[Analytics & Recommendations]
+        AnalyticsService[Analytics Service]
+        RecommendationService[Recommendation Service]
+        ScoringService[Scoring Service]
+    end
+
+    subgraph INTEGRATION[Integration & Ecosystem]
+        IntegrationHub[Integration Hub]
+        ThirdPartyIntegration[3rd‑Party Integration Service]
+    end
+
+end
+
+%% =========================
+%% EVENT & MESSAGING ZONE
+%% =========================
+subgraph EVENTS[Event & Messaging Zone]
+    EventBus[Event Bus]
+    MessageQueues[Message Queues]
+end
+
+%% =========================
+%% DATA & STORAGE ZONE
+%% =========================
+subgraph DATA[Data & Storage Zone]
+    UserStore[User & Profile Store]
+    TrainingStore[Training & Telemetry Store]
+    SocialGraphStore[Social Graph Store]
+    GamificationStore[Gamification Store]
+    InventoryStore[Inventory & Commerce Store]
+    DataLake[Analytics Data Lake / Warehouse]
+end
+
+%% =========================
+%% SECURITY ZONE
+%% =========================
+subgraph SECURITY[Security & Compliance Zone]
+    IAM[IAM / Access Control]
+    Audit[Audit & Logging]
+    DataProtection[Data Protection & Encryption]
+end
+
+%% =========================
+%% CONNECTIONS
+%% =========================
+
+%% Client → API
+MobileApp --> ExternalGW
+WebApp --> ExternalGW
+Devices --> IoTGW
+
+%% API → Core
+ExternalGW --> UserService
+ExternalGW --> TrainingService
+ExternalGW --> SocialService
+ExternalGW --> GamificationService
+ExternalGW --> InventoryService
+ExternalGW --> RecommendationService
+
+InternalGW --> CommerceIntegration
+InternalGW --> IntegrationHub
+
+IoTGW --> TelemetryIngest
+
+%% Core → Event Bus
+TrainingService --> EventBus
+TelemetryIngest --> EventBus
+SocialService --> EventBus
+GamificationService --> EventBus
+ChallengeService --> EventBus
+InventoryService --> EventBus
+
+%% Event Bus → Core
+EventBus --> AnalyticsService
+EventBus --> LeaderboardService
+EventBus --> RecommendationService
+
+%% Core → Data
+UserService --> UserStore
+TrainingService --> TrainingStore
+TelemetryIngest --> TrainingStore
+SocialService --> SocialGraphStore
+GamificationService --> GamificationStore
+InventoryService --> InventoryStore
+AnalyticsService --> DataLake
+
+%% Security Layer
+UserService --> IAM
+TrainingService --> IAM
+ExternalGW --> IAM
+InternalGW --> IAM
+IoTGW --> IAM
+
+Audit --> UserService
+Audit --> TrainingService
+Audit --> ExternalGW
+
+DataProtection --> DATA
+```
