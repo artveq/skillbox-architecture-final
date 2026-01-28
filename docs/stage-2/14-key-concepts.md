@@ -275,52 +275,69 @@ Events --> Analytics
 Определяет размещение компонентов, сетевые границы, зоны доступности и взаимодействие между облаками.
 
 ```mermaid
+
 flowchart TB
 
-subgraph Global[Глобальная инфраструктура]
+%% =========================
+%% GLOBAL LAYER
+%% =========================
+subgraph GLOBAL[Global Layer]
     GTM[Global Traffic Manager]
+    GlobalCDN[Global CDN]
+    GlobalIAM[Global Identity and Federation]
+    GlobalEvents[Global Event Bus]
 end
 
-subgraph RegionA[Регион A]
-    subgraph EdgeA[Edge Layer]
-        APIGW_A[API Gateway]
-        CDN_A[CDN]
-    end
+%% =========================
+%% MULTI-REGION CLUSTER
+%% =========================
+subgraph REGIONS[Multiple Regions: US, EU +]
+    
+    subgraph REGION_TEMPLATE[Regional Deployment Template]
+        
+        subgraph EDGE[Edge Layer]
+            APIGW[API Gateway]
+            CDN[Regional CDN]
+            WAF[WAF and DDoS]
+        end
 
-    subgraph ServicesA[Service Layer]
-        CoreA[Core Services Cluster]
-        WorkflowA[Workflow Engine]
-    end
+        subgraph SERVICES[Service Layer]
+            Core[Core Services Cluster]
+            Workflow[Workflow Engine]
+            Events[Event Streaming]
+        end
 
-    subgraph DataA[Data Layer]
-        StoresA[Domain Stores]
-        LakeA[Data Lake]
-        HotA[Hot Storage]
-    end
+        subgraph DATA[Data Layer]
+            DB[Domain Data Stores]
+            Lake[Regional Data Lake]
+            Hot[Hot Storage]
+        end
 
-    subgraph SecurityA[Security Layer]
-        IAM_A[IAM]
-        Secrets_A[Secrets Manager]
-    end
+        subgraph SECURITY[Security Layer]
+            IAM[IAM]
+            Secrets[Secrets Manager]
+        end
 
-    subgraph ObsA[Observability Layer]
-        MetricsA[Metrics]
-        LogsA[Logs]
+        subgraph OBS[Observability Layer]
+            Metrics[Metrics]
+            Logs[Logs]
+        end
+
     end
 end
 
-subgraph RegionB[Регион B]
-    APIGW_B[API Gateway]
-    CoreB[Core Services Cluster]
-    StoresB[Domain Stores]
-end
+%% =========================
+%% CONNECTIONS
+%% =========================
+GTM --> APIGW
+GlobalCDN --> CDN
+GlobalIAM --> IAM
+GlobalEvents --> Events
 
-GTM --> APIGW_A
-GTM --> APIGW_B
-APIGW_A --> CoreA
-CoreA --> StoresA
-CoreA --> LakeA
-CoreA --> HotA
+Core --> DB
+Core --> Lake
+Core --> Hot
+
 ```
 
 ### **Основные элементы инфраструктуры**
