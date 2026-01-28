@@ -171,10 +171,10 @@ end
 - Владельцы: Inventory & Commerce Services.
 
 #### Аналитика и ML
-- Сырые события → Data Lake.  
-- Агрегаты → Warehouse.  
-- Признаки → Feature Store.  
-- Модели → Model Serving.
+- Сырые события - Data Lake.  
+- Агрегаты - Warehouse.  
+- Признаки - Feature Store.  
+- Модели - Model Serving.
 
 
 ### **Таблица типов данных и рекомендуемых типов СУБД**
@@ -201,10 +201,10 @@ end
 
 ### **Основные потоки данных**
 
-- **Телеметрия → IoT Gateway → Telemetry Ingest → Event Streaming → Training Store**  
-- **События активности → Event Streaming → Feed Engine → Hot Storage → BFF → Клиент**  
-- **События челленджей → Event Streaming → Gamification → Leaderboard → Hot Storage**  
-- **Сырые события → Data Lake → Analytics → Recommendations → BFF → Клиент**
+- Телеметрия - IoT Gateway - Telemetry Ingest - Event Streaming - Training Store  
+- События активности - Event Streaming - Feed Engine - Hot Storage - BFF - Клиент  
+- События челленджей - Event Streaming - Gamification - Leaderboard - Hot Storage  
+- Сырые события - Data Lake - Analytics - Recommendations - BFF - Клиент
 
 ---
 
