@@ -80,53 +80,67 @@ Events --> Core
 Информационное представление описывает основные типы данных, их потоки, хранилища и границы владения.
 
 ```mermaid
+
 flowchart TB
 
-subgraph UserData[Пользовательские данные]
-    Profile[Профиль]
-    Settings[Настройки]
-    Consents[Согласия]
+%% USER DOMAIN
+subgraph UserDomain[User & Identity]
+    UserData[User profile, settings, consents]
+    UserStore[(User Store)]
+    UserData --> UserStore
 end
 
-subgraph TrainingData[Тренировочные данные]
-    Telemetry[Телеметрия]
-    Sessions[Тренировки]
-    RealtimeState[Состояние тренировки]
+%% TRAINING DOMAIN
+subgraph TrainingDomain[Training & Telemetry]
+    TrainingData[Telemetry & training sessions]
+    TrainingStore[(Training & Telemetry Store)]
+    TrainingData --> TrainingStore
 end
 
-subgraph SocialData[Социальные данные]
-    Graph[Социальный граф]
-    Groups[Группы]
-    Feed[Лента]
+%% SOCIAL DOMAIN
+subgraph SocialDomain[Social & Community]
+    SocialData[Social graph, groups]
+    FeedData[Activity feed]
+    SocialStore[(Social Graph Store)]
+    FeedStore[(Feed / Hot Storage)]
+    SocialData --> SocialStore
+    FeedData --> FeedStore
 end
 
-subgraph GamificationData[Геймификация]
-    Points[Очки]
-    Badges[Бейджи]
-    Leaderboards[Рейтинги]
+%% GAMIFICATION DOMAIN
+subgraph GamificationDomain[Gamification & Challenges]
+    GamificationData[Points, badges, progress, leaderboards]
+    GamificationStore[(Gamification Store)]
+    GamificationData --> GamificationStore
 end
 
-subgraph InventoryData[Инвентарь]
-    Items[Товары]
-    Promo[Промо]
+%% INVENTORY DOMAIN
+subgraph InventoryDomain[Inventory & Commerce]
+    InventoryData[Items, promo]
+    InventoryStore[(Inventory Store)]
+    InventoryData --> InventoryStore
 end
 
-subgraph AnalyticsData[Аналитика и ML]
-    RawEvents[Сырые события]
-    Aggregates[Агрегаты]
-    Features[Признаки]
-    Models[Модели]
-end
+%% ANALYTICS DOMAIN
+subgraph AnalyticsDomain[Analytics & ML]
+    RawEvents[Raw events]
+    Aggregates[Aggregates]
+    Features[ML features]
+    Models[ML models]
 
-Telemetry --> RawEvents
-RawEvents --> Aggregates
-Aggregates --> Features
-Features --> Models
-Graph --> Feed
-Sessions --> Feed
-Points --> Leaderboards
+    DataLake[(Data Lake)]
+    Warehouse[(Analytics Warehouse)]
+    FeatureStore[(Feature Store)]
+    ModelRepo[(Model Repository)]
+
+    RawEvents --> DataLake
+    Aggregates --> Warehouse
+    Features --> FeatureStore
+    Models --> ModelRepo
+end
 
 ```
+
 ### **Основные доменные данные**
 
 #### Пользовательские данные
