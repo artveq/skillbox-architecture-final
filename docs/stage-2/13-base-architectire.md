@@ -183,6 +183,7 @@
 ## Логическая схема
 
 ```mermaid
+
 flowchart TB
 
 %% =========================
@@ -191,25 +192,35 @@ flowchart TB
 subgraph CLIENT[Client Zone]
     MobileApp[Mobile App]
     WebApp[Web App]
-    Devices[Wearables & Sensors]
+    Devices[Wearables and Sensors]
 end
 
 %% =========================
 %% API & EDGE ZONE
 %% =========================
-subgraph APIEDGE[API & Edge Zone]
+subgraph APIEDGE[API and Edge Zone]
     ExternalGW[External API Gateway]
     InternalGW[Internal API Gateway]
     IoTGW[IoT Gateway]
-    BFF[API Composition Layer (BFF)]
+    BFF[API Composition Layer / BFF]
     CDN[Edge Cache / CDN]
+    GTM[Global Traffic Manager]
+    WAF[WAF and DDoS Protection]
 end
 
 %% =========================
-%% CORE SERVICES ZONE
+%% CORE SERVICES ZONE (доменные группы)
 %% =========================
 subgraph CORE[Core Services Zone]
-    CoreServices[Доменные сервисы (User, Training, Social, Gamification, Inventory, Analytics, Integration)]
+
+    UserIdentity[User & Identity Services]
+    TrainingTelemetry[Training & Telemetry Services]
+    SocialCommunity[Social & Community Services]
+    Gamification[Gamification & Challenges Services]
+    InventoryCommerce[Inventory & Commerce Services]
+    AnalyticsRec[Analytics & Recommendations Services]
+    IntegrationHub[Integration & Ecosystem Services]
+
 end
 
 %% =========================
@@ -244,6 +255,7 @@ subgraph SECURITY[Security & Compliance Zone]
     IAM[IAM / Access Control]
     Audit[Audit & Logging]
     Protection[Data Protection & Encryption]
+    Secrets[Secrets & Config Management]
 end
 
 %% =========================
@@ -256,8 +268,9 @@ subgraph OBS[Observability Zone]
 end
 
 %% =========================
-%% CONNECTIONS
+%% CONNECTIONS (только зоны)
 %% =========================
+
 MobileApp --> ExternalGW
 WebApp --> ExternalGW
 Devices --> IoTGW
@@ -266,21 +279,15 @@ ExternalGW --> BFF
 BFF --> CORE
 IoTGW --> CORE
 
+CORE --> WorkflowEngine
 CORE --> EventStreaming
 CORE --> Queueing
-
 CORE --> DomainStores
 CORE --> DataLake
 CORE --> HotStorage
-
-CORE --> WorkflowEngine
-
 CORE --> IAM
 CORE --> Audit
-DATA --> Protection
-
 CORE --> Metrics
-EVENTS --> Metrics
 CORE --> Logs
 OBS --> SLO
 
